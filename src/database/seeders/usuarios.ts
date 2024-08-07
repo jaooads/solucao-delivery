@@ -4,8 +4,8 @@ export async function up(queryInterface: QueryInterface) {
   await queryInterface.bulkInsert('users', [{
     email: 'teste@teste',
     senha: 'joao12345',
-    createdAt: new Date(),
-    updatedAt: new Date()
+    criadoEm: new Date(),
+    atualizadoEm: new Date()
   }]);
 }
 

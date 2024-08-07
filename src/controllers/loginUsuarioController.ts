@@ -8,10 +8,7 @@ export default async function loginUsuarioController(req: Request, res: Response
   console.log('email:', email, 'senha:', senha);
   try {
 
-    if (
-      !email ||
-      !senha
-    ) {
+    if (!email || !senha) {
       res.status(400).send({ data: { mensagem: 'Informações insuficientes!' } })
     } else {
 

@@ -24,7 +24,7 @@ Usuarios.init({
   },
 }, {
   sequelize,
-  tableName: 'users',
+  tableName: 'usuarios',
 });
 
 export default Usuarios;

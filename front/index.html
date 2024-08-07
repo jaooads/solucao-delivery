@@ -17,14 +17,27 @@
             <button type="submit">Login</button>
             <p id="message"></p>
         </form>
+        <div id="signupModal" style="display: none;">
+            <h2>Cadastro</h2>
+            <form id="signupForm">
+                <input type="text" name="email" placeholder="E-mail" required>
+                <input type="password" name="senha" placeholder="Senha" required>
+                <button type="submit">Cadastrar</button>
+                <button type="button" id="closeModal">Fechar</button>
+                <p id="signupMessage"></p>
+            </form>
+        </div>
     </div>
 
     <script>
         const form = document.getElementById('loginForm');
+        const signupModal = document.getElementById('signupModal');
+        const closeModal = document.getElementById('closeModal');
         const message = document.getElementById('message');
+        const signupMessage = document.getElementById('signupMessage');
 
         form.addEventListener('submit', async (e) => {
-            e.preventDefault(); // Impede o envio padrão do formulário
+            e.preventDefault();
 
             const formData = new FormData(form);
             const data = {
@@ -41,11 +54,49 @@
                     body: JSON.stringify(data)
                 });
 
-                const result = await response.json(); // Recebe a resposta como JSON
-                message.textContent = result.data.mensagem; // Mostra a mensagem recebida
+                const result = await response.json();
+                if (response.ok) {
+                    message.textContent = result.data.mensagem;
+                } else {
+                    signupModal.style.display = 'block';
+                }
             } catch (error) {
                 console.error('Erro:', error);
                 message.textContent = 'Erro ao tentar fazer login.';
+            }
+        });
+
+        closeModal.addEventListener('click', () => {
+            signupModal.style.display = 'none';
+        });
+
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const signupFormData = new FormData(e.target);
+            const signupData = {
+                email: signupFormData.get('email'),
+                senha: signupFormData.get('senha')
+            };
+
+            try {
+                const response = await fetch('/cadastrar', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(signupData)
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    signupMessage.textContent = result.data.mensagem;
+                } else {
+                    signupMessage.textContent = 'Erro ao tentar cadastrar.';
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                signupMessage.textContent = 'Erro ao tentar cadastrar.';
             }
         });
     </script>
