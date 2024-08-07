@@ -1,14 +1,19 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import path from 'path';
+import router from '../routes';
 
-dotenv.config()
-
+dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 3000;
+
+app.use(express.static(path.join(__dirname, '../front')));
+
+app.use(router)
 
 app.get('/', (req, res) => {
-  res.send('Servidor online na porta 3000!');
+  res.sendFile(path.join(__dirname, '../front/index.html'));
 });
 
 app.listen(PORT, () => {

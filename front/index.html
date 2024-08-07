@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Login</h1>
+        <form id="loginForm">
+            <input type="text" name="username" placeholder="Usuário" required>
+            <input type="password" name="password" placeholder="Senha" required>
+            <button type="submit">Login</button>
+            <p id="message"></p>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById('loginForm');
+        const message = document.getElementById('message');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Impede o envio padrão do formulário
+
+            const formData = new FormData(form);
+            const data = {
+                email: formData.get('username'),
+                senha: formData.get('password')
+            };
+
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json(); // Recebe a resposta como JSON
+                message.textContent = result.data.mensagem; // Mostra a mensagem recebida
+            } catch (error) {
+                console.error('Erro:', error);
+                message.textContent = 'Erro ao tentar fazer login.';
+            }
+        });
+    </script>
+</body>
+
+</html>
