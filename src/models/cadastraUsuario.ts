@@ -2,7 +2,8 @@ import Usuario from '../database/models/usuarios';
 
 export default async function cadastraUsuario(email: string, senha: string) {
   try {
-    const usuarioExistente = await Usuario.findOne({ where: { email } });
+
+    const usuarioExistente = await Usuario.findOne({ where: { email: email } });
 
     if (usuarioExistente !== null) {
       return { status: 400, mensagem: 'Usuário já cadastrado!' };

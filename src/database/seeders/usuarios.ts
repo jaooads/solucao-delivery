@@ -1,6 +1,6 @@
 import { QueryInterface, DataTypes } from 'sequelize';
 
-export async function up(queryInterface: QueryInterface) {
+export default async function up(queryInterface: QueryInterface) {
   await queryInterface.bulkInsert('users', [{
     email: 'teste@teste',
     senha: 'joao12345',

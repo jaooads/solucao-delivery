@@ -4,7 +4,7 @@ import sequelize from '../config/database';
 class Usuarios extends Model {
   public id!: number;
   public email!: string;
-  public password!: string;
+  public senha!: string;
 }
 
 Usuarios.init({
