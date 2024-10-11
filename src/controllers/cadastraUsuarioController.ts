@@ -8,13 +8,20 @@ export default async function cadastrarUsuarioController(req: Request, res: Resp
   const senha: string | any = req.body.senha;
 
   try {
+
     if (!email || !senha) {
-      return res.status(400).send({ dados: { mensagem: 'Informações insuficientes!' } });
+      res.status(400).send({ data: { mensagem: 'Informações insuficientes!' } })
     } else {
 
-      const novoUsuario = cadastraUsuario(email, senha);
+      const novoUsuario = await cadastraUsuario(email, senha);
 
-      return res.status(200).send({ mensagem: 'Usuário cadastrado com sucesso!', dados: novoUsuario });
+      if (novoUsuario.status === 200) {
+        return res.status(200).send({ data: { mensagem: novoUsuario.mensagem } })
+      } else {
+        return res.status(novoUsuario.status).send({ data: { mensagem: novoUsuario?.mensagem } });
+
+      }
+
     }
   } catch (err) {
     console.error('Erro ao cadastrar usuário:', err);

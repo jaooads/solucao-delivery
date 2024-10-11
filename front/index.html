@@ -6,106 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        /* Estilos gerais */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 400px;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        h1 {
-            margin-bottom: 20px;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        input {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        button {
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            background-color: #007bff;
-            color: #fff;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        #signupModal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        #signupModal>div {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-
-        #signupModal h2 {
-            margin-top: 0;
-        }
-
-        #signupModal button {
-            margin-right: 10px;
-        }
-
-        #signupMessage {
-            margin-top: 10px;
-            color: #d9534f;
-        }
-
-        #openSignupModal {
-            color: #007bff;
-            cursor: pointer;
-            text-decoration: underline;
-        }
-
-        #openSignupModal:hover {
-            text-decoration: none;
-        }
-    </style>
 </head>
 
 <body>
-    <div class="container">
+    <div class="container" id="loginContainer">
         <h1>Login</h1>
         <form id="loginForm">
             <input type="text" name="username" placeholder="Usuário" required>
@@ -114,23 +18,24 @@
             <p id="message"></p>
         </form>
         <p><span id="openSignupModal">Não possui cadastro? Cadastre-se</span></p>
+    </div>
 
-        <div id="signupModal" style="display: none;">
-            <div>
-                <h2>Cadastro</h2>
-                <form id="signupForm">
-                    <input type="text" name="email" placeholder="E-mail" required>
-                    <input type="password" name="senha" placeholder="Senha" required>
-                    <button type="submit">Cadastrar</button>
-                    <button type="button" id="closeModal">Fechar</button>
-                    <p id="signupMessage"></p>
-                </form>
-            </div>
+    <div id="signupModal" style="display: none;">
+        <div>
+            <button type="button" id="closeModal"></button> <!-- Flecha para voltar -->
+            <h2>Cadastro</h2>
+            <form id="signupForm">
+                <input type="text" name="email" placeholder="E-mail" required>
+                <input type="password" name="senha" placeholder="Senha" required>
+                <button type="submit">Cadastrar</button>
+                <p id="signupMessage"></p>
+            </form>
         </div>
     </div>
 
     <script>
         const form = document.getElementById('loginForm');
+        const loginContainer = document.getElementById('loginContainer');
         const signupModal = document.getElementById('signupModal');
         const closeModal = document.getElementById('closeModal');
         const openSignupModal = document.getElementById('openSignupModal');
@@ -142,12 +47,12 @@
 
             const formData = new FormData(form);
             const data = {
-                email: formData.get('username'),
-                senha: formData.get('password')
+                email: formData.get('email'),
+                senha: formData.get('senha')
             };
 
             try {
-                const response = await fetch('/login', {
+                const response = await fetch('/loginUsuario', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -172,11 +77,13 @@
 
         openSignupModal.addEventListener('click', (e) => {
             e.preventDefault();
-            signupModal.style.display = 'flex';
+            loginContainer.style.display = 'none';  // Oculta o formulário de login
+            signupModal.style.display = 'flex';     // Mostra o modal de cadastro
         });
 
         closeModal.addEventListener('click', () => {
-            signupModal.style.display = 'none';
+            signupModal.style.display = 'none';     // Esconde o modal de cadastro
+            loginContainer.style.display = 'block'; // Mostra o formulário de login
         });
 
         document.getElementById('signupForm').addEventListener('submit', async (e) => {
@@ -203,6 +110,7 @@
                     signupMessage.style.color = 'green';
                     setTimeout(() => {
                         signupModal.style.display = 'none';
+                        loginContainer.style.display = 'block'; // Volta ao formulário de login
                     }, 2000);
                 } else {
                     signupMessage.textContent = result.mensagem || 'Erro ao tentar cadastrar.';
