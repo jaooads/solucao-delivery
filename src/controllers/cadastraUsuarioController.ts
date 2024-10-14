@@ -21,7 +21,6 @@ export default async function cadastrarUsuarioController(req: Request, res: Resp
         return res.status(novoUsuario.status).send({ data: { mensagem: novoUsuario?.mensagem } });
 
       }
-
     }
   } catch (err) {
     console.error('Erro ao cadastrar usuário:', err);
