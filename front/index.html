@@ -217,8 +217,9 @@
 
             if (response.ok) {
                 showModal('Login bem-sucedido!');
-            } else {
-                showModal(data.message || 'Erro ao fazer login');
+                setTimeout(() => {
+                    window.location.href = 'lojas.html'; // Redireciona para lojas.html
+                }, 1000); // Espera 1 segundo antes de redirecionar
             }
         });
 
@@ -269,6 +270,7 @@
                 }
             }, 1000);
         }
+
     </script>
 </body>
 
