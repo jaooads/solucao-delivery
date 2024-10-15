@@ -14,4 +14,12 @@ const sequelize = new Sequelize(
   }
 );
 
+sequelize.sync({ alter: true })
+  .then(() => {
+    console.log('Tabelas sincronizadas com sucesso!');
+  })
+  .catch((err: any) => {
+    console.error('Erro ao sincronizar tabelas: ', err);
+  });
+
 export default sequelize;
